@@ -1,0 +1,53 @@
+version: '3'
+services:
+  app:
+    container_name: app
+    platform: linux/amd64
+    build:
+      context: app
+      target: prod
+    restart: always
+    ports:
+      - 8085:8080
+    depends_on:
+      - mongodb
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: "3"
+        labels: "app_production_status"
+        env: "os"
+  
+  mongodb:
+    # image: jeanflores2c93/mymongo
+    image: mongo
+    container_name: mongodb
+    platform: linux/amd64
+    # build:
+    #   context: mongo
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MONGO_INITDB_DATABASE="${DB_NAME}"
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD="${DB_PASSWORD}"
+    ports:
+      - 27017:27017
+      - 27019:27019
+    expose:
+      - 27017
+    volumes:
+      - ./mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./mongodb:/data/db
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: "3"
+        labels: "mongo_production_status"
+        env: "os"
+
+volumes:
+  mongodb:

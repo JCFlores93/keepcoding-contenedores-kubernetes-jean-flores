@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  labels:
+    app-service: mongodb
+spec:
+  type: ClusterIP
+  selector:
+    app-pod: mongodb
+  ports:
+  - name: "27017"
+    port: 27017
+    targetPort: 27017

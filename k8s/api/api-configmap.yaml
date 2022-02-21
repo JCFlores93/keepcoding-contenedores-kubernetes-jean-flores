@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-config
+data:
+  DB_HOST: mongodb
+  DB_PORT: "27017"
+  DB_NAME: petsdb
+  DB_USER: jean
+  DB_PASSWORD: "123456"

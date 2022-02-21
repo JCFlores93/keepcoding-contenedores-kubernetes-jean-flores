@@ -1,0 +1,17 @@
+helm get notes mydb
+helm get values mydb
+helm get values mydb --revision 1
+helm get manifest mydb --revision 1
+helm history mydb
+helm rollback mywebserver 3
+
+helm install mywebserver bitnami/apache --namespace mynamespace --create-namespace
+helm ls --namespace mynamespace
+
+helm upgrade --install mywebserver
+
+helm install bitnami/apache --generate-name --name-template "mywebserver-{{ randAlpha 7 | upper }}"
+
+helm get values mydb --all
+
+helm dependency update firstchart

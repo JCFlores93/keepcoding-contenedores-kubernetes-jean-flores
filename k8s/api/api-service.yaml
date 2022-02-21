@@ -1,0 +1,47 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   namespace: todo
+#   name: todo-api-gateway
+#   labels:
+#     todo-app-service: todo-api-gateway
+# spec:
+#   type: ClusterIP
+#   selector:
+#     todo-app-pod: todo-api-gateway
+#   ports:
+#   - name: "http"
+#     port: 3000
+#     targetPort: 3000
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mi-servicio
+  labels:
+    api-service: api
+spec:
+  type: NodePort
+  selector:
+    api-pod: api
+  ports:
+    # Por defecto y por comodidad, el `TargetPort` tiene el mismo valor que el campo `port.
+    - port: 80
+      targetPort: 8080
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+  labels:
+    api-service: api
+spec:
+  type: LoadBalancer
+  selector:
+    api-pod: api
+  ports:
+    # Por defecto y por comodidad, el `TargetPort` tiene el mismo valor que el campo `port.
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP

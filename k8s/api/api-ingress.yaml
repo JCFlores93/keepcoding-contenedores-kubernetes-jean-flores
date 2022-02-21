@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mi-servicio-gke-ing
+  annotations:
+    kubernetes.io/ingress.class: gce
+spec:
+  rules:
+  # - http:
+      # paths:
+      # - path: /api/dogs
+      #   backend:
+      #     serviceName: mi-servicio
+      #     servicePort: 80
+
+  - http:
+      paths:
+      - path: /
+        pathType: Exact
+        backend:
+          service:
+            name: mi-servicio-gke
+            port:
+              number: 80

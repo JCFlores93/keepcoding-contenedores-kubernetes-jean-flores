@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: mongodb-initdb-config
+data:
+    initdb.js: |
+        use petsdb;
+        db.createUser({
+        user: "jean",
+        pwd: "123456",
+        roles: [
+            {
+                role: "readWrite",
+                db: "petsdb"
+            }
+        ])
+
+# data:
+#     my_init_script.sh: | 
+#     #!/bin/bash 
+#     echo "Create Database and Relative Users." 
+#     # Create New Users echo 'db.createUser({user:"${dbUser}",pwd:"${dbPassword}",roles:[{role:"dbAdmin", db:"${dbName}"}]});'> /tmp/crtuser.js 
+#     chmod 755 /tmp/crtuser.js 
+#     mongo admin -u 'root' -p '${rootPassword}' /tmp/crtuser.js 
+#     #Insert Test Data 
+#     echo 'db.${dbName}.insert({test:"ok",status:"success"});'> /tmp/insinfo.js 
+#     chmod 755 /tmp/insinfo.js 
+#     mongo ${dbName} -u '${dbUser}' -p '${dbPassword}' /tmp/insinfo.js
+
+# data:
+#     my_init_script.sh: | 
+#     #!/bin/bash 
+#     echo "Create Database and Relative Users." 
+#     # Create New Users echo 'db.createUser({user:"jean",pwd:"123456",roles:[{role:"readWrite", db:"petsdb"}]});' > /tmp/crtuser.js 
+#     chmod 755 /tmp/crtuser.js 
+#     mongo admin -u 'root' -p '123456' /tmp/crtuser.js 
+#     #Insert Test Data 
+#     echo 'db.petsdb.insert({test:"ok",status:"success"});'> /tmp/insinfo.js 
+#     chmod 755 /tmp/insinfo.js 
+#     mongo petsdb -u 'jean' -p '123456' /tmp/insinfo.js
