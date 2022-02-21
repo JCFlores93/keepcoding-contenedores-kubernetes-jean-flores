@@ -1,8 +1,7 @@
-version: '3'
+version: '3.4'
 services:
   app:
     container_name: app
-    platform: linux/amd64
     build:
       context: app
       target: prod
@@ -23,15 +22,12 @@ services:
     # image: jeanflores2c93/mymongo
     image: mongo
     container_name: mongodb
-    platform: linux/amd64
-    # build:
-    #   context: mongo
     environment:
       - PUID=1000
       - PGID=1000
-      - MONGO_INITDB_DATABASE="${DB_NAME}"
+      - MONGO_INITDB_DATABASE=petsdb
       - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD="${DB_PASSWORD}"
+      - MONGO_INITDB_ROOT_PASSWORD=123456
     ports:
       - 27017:27017
       - 27019:27019
