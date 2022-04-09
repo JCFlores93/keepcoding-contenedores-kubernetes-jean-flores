@@ -76,13 +76,21 @@ router.route("/dogs")
     })
 
 router.route('/dogs')
-    .get(function(req, res) {
-        Dog.find(function(err, dogs) {
-            if (err){
-                res.send(err);
-            }
-            res.json(dogs);
-        })
+    .get(async function(req, res) {
+        try {
+            const response = await Dog.find()
+            console.log(response)
+            res.json(response)
+        } catch (error) {
+            console.log(error.stack)
+            res.send(error)
+        }
+        // Dog.find(function(err, dogs) {
+        //     if (err){
+        //         res.send(err);
+        //     }
+        //     res.json(dogs);
+        // })
     })
 
 //Ruta para editar un perrito

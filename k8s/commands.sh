@@ -21,4 +21,5 @@ kubectl describe po
 kubectl exec --stdin --tty mongodb1-6c9564f474-pmklg -- /bin/bash
 
 mongo admin --username jean -p --host mongodb
+mongo --username jean -p --host mongodb
 --port SOURCE-PORT

@@ -89,7 +89,7 @@ ingress:
     kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: api.35-225-12-23.nip.io
+    - host: apihelm.35-224-162-28.nip.io
       paths:
         - path: /
           pathType: Prefix

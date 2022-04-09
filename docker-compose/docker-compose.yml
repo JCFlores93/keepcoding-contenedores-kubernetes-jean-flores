@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.7'
 services:
   app:
     container_name: app
@@ -7,7 +7,7 @@ services:
       target: prod
     restart: always
     ports:
-      - 8085:8080
+      - ${APP_PORT}:8080
     depends_on:
       - mongodb
     logging:
@@ -19,22 +19,21 @@ services:
         env: "os"
   
   mongodb:
-    # image: jeanflores2c93/mymongo
     image: mongo
     container_name: mongodb
     environment:
-      - PUID=1000
-      - PGID=1000
-      - MONGO_INITDB_DATABASE=petsdb
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=123456
+      PUID: 1000
+      PGID: 1000
+      MONGO_INITDB_ROOT_USERNAME: ${DB_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_NAME}
     ports:
-      - 27017:27017
+      - ${DB_PORT}:${DB_PORT}
       - 27019:27019
     expose:
-      - 27017
+      - ${DB_PORT}
     volumes:
-      - ./mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - ./mongodb:/data/db
     restart: unless-stopped
     logging:

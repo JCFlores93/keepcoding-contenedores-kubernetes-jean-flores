@@ -3,24 +3,78 @@ Esta aplicación está basada en node.js como backend y como base de datos mongo
 
 Teniendo los siguientes endpoints:<br>
 /api/(GET) -> Devuelve un mensaje de Hoola, usado para probar el despliegue del backend mas no el acceso a la BD<br>
-/api/dogs(GET) -> Devuelve los perritos registrados en forma de arreglo.<br>
+  Ejecutar: curl --location --request GET 'http://localhost:8085/api/' --data-raw ''
+  Response: {"message":"Hoola "}
+
+/api/dogs(GET) -> Devuelve todos los perritos registrados en forma de arreglo.<br>
+  Ejecutar:
+    curl --location --request GET 'http://localhost:8085/api/dogs'
+
 /api/dogs(POST) -> Registra un nuevo perrito.<br>
+  Ejecutar: 
+    curl --location --request POST 'http://localhost:8085/api/dogs' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+      "name": "Rocky",
+      "age": "10"
+    }'
+
 /api/dogs/:dog_id(PUT) -> Actualiza los datos de un perrito.<br>
+  Ejecutar: 
+    curl --location --request PUT 'http://localhost:8085/api/dogs/:dog_id' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+      "name": "Rocky",
+      "age": "10"
+    }'
+
 /api/dogs/:dog_id(DELETE) -> Elimina los datos de un perrito.<br>
+  Ejecutar:
+    curl --location --request DELETE 'http://localhost:8085/api/dogs/:dog_id'
 
 
 # Docker compose
 Dirigirse a la carpeta docker-compose, donde se encontrará con la siguiente estructura:<br>
 
 app/ -> todos los archivos del backend con su Dockerfile.<br>
-mongo/ -> Algunos archivos para la configuraci'on inicial de la BD.<br>
+mongo/ -> Algunos archivos para la configuración inicial de la BD.<br>
 mongodb/ -> Volumen local de la BD /data/db.<br>
 
-comando de ejecuci'on.<br>
+comando de ejecución.<br>
 ```docker-compose up -d --quiet-pull --remove-orphans --build```<br>
 
-La aplicaci'on podr'a ser accedida desde el puerto 8085 con los mismos endpoints mencionados en la parte inicial
+La aplicación podrá ser accedida desde el puerto 8085 con los mismos endpoints mencionados en la parte inicial
 
+Teniendo los siguientes endpoints:<br>
+/api/(GET) -> Devuelve un mensaje de Hoola, usado para probar el despliegue del backend mas no el acceso a la BD<br>
+  Ejecutar: curl --location --request GET 'http://localhost:8085/api/' --data-raw ''
+  Response: {"message":"Hoola "}
+
+/api/dogs(GET) -> Devuelve todos los perritos registrados en forma de arreglo.<br>
+  Ejecutar:
+    curl --location --request GET 'http://localhost:8085/api/dogs'
+
+/api/dogs(POST) -> Registra un nuevo perrito.<br>
+  Ejecutar: 
+    curl --location --request POST 'http://localhost:8085/api/dogs' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+      "name": "Rocky",
+      "age": "10"
+    }'
+
+/api/dogs/:dog_id(PUT) -> Actualiza los datos de un perrito.<br>
+  Ejecutar: 
+    curl --location --request PUT 'http://localhost:8085/api/dogs/:dog_id' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+      "name": "Rocky",
+      "age": "10"
+    }'
+
+/api/dogs/:dog_id(DELETE) -> Elimina los datos de un perrito.<br>
+  Ejecutar:
+    curl --location --request DELETE 'http://localhost:8085/api/dogs/:dog_id'
 
 # K8S
 Dirigirse a la carpeta K8S, donde se encontrará con la siguiente estructura:<br>
@@ -42,14 +96,73 @@ mongo/ -> Todos los manifestos para el despliegue de mongodb dentro del cluster,
   mongodb-pvc1.yaml<br>
   mongodb-secrets.yaml<br>
   mongodb-secrets1.yaml<br>
-  
+
+Verificar que la BD petsdb haya sido creada. En caso de que no crearla manualmente.<br>
+- Verificar los pods<br>
+kubectl get po<br>
+
+- Acceder al pod<br>
+kubectl --stdin --tty mongodb-pod-id -- /bin/bash<br>
+
+- Conectarse a la BD<br>
+mongo admin --username jean -p --host mongodb<br>
+
+- En caso el usuario no haya sido creado, ejecutar:<br>
+db.createUser(<br>
+  {<br>
+    user: "jean",<br>
+    pwd: "123456",<br>
+    roles: [<br>
+       { role: "readWrite", db: "petsdb" }<br>
+    ]<br>
+  }<br>
+)<br>
+
+- Crear un registro<br>
+use petsdb<br>
+db.dogs.insert({ "name": "Rocky", "age": "10" })<br>
+
+Instalación de nginx ingress<br>
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.45.0/deploy/static/provider/cloud/deploy.yaml<br>
+
 resources/ Todos los manifestos para el despliegue de nginx ingress dentro del cluster-> .<br>
   ```Ejecutar kubectl apply -f .```<br>
-  ingress-controller-v1.1.1.yaml<br>
   ingress.yaml<br>
   
 Endpoint resultante: <br>
-```http://api.35-225-12-23.nip.io/api/```<br>
+```http://api.35-224-162-28.nip.io/api/```<br>
+
+Teniendo los siguientes endpoints:<br>
+/api/(GET) -> Devuelve un mensaje de Hoola, usado para probar el despliegue del backend mas no el acceso a la BD<br>
+  Ejecutar: curl --location --request GET 'http://api.35-224-162-28.nip.io/api/' --data-raw ''
+  Response: {"message":"Hoola "}
+
+/api/dogs(GET) -> Devuelve todos los perritos registrados en forma de arreglo.<br>
+  Ejecutar:
+    curl --location --request GET 'http://api.35-224-162-28.nip.io/api/dogs'
+
+/api/dogs(POST) -> Registra un nuevo perrito.<br>
+  Ejecutar: 
+    curl --location --request POST 'http://api.35-224-162-28.nip.io/api/dogs' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+      "name": "Rocky",
+      "age": "20"
+    }'
+
+/api/dogs/:dog_id(PUT) -> Actualiza los datos de un perrito.<br>
+  Ejecutar: 
+    curl --location --request PUT 'http://api.35-224-162-28.nip.io/api/dogs/6250ee35c61d96da72bcfd78' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+      "name": "Rocky",
+      "age": "10"
+    }'
+
+/api/dogs/:dog_id(DELETE) -> Elimina los datos de un perrito.<br>
+  Ejecutar:
+    curl --location --request DELETE 'http://api.35-224-162-28.nip.io/api/dogs/6250ee35c61d96da72bcfd78'
+
 
 # Helm
 
@@ -177,7 +290,7 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx
   hosts:
-    - host: api.35-225-12-23.nip.io
+    - host: apihelm.35-224-162-28.nip.io
       paths:
         - path: /
           pathType: Prefix
@@ -194,10 +307,35 @@ helm upgrade petsclinic petsclinic --values petsclinic/values.yaml
 ```
 
 Endpoint Resultante
-```api.35-225-12-23.nip.io```
+```apihelm.35-224-162-28.nip.io```
 
+Teniendo los siguientes endpoints:<br>
+/api/(GET) -> Devuelve un mensaje de Hoola, usado para probar el despliegue del backend mas no el acceso a la BD<br>
+  Ejecutar: curl --location --request GET 'http://apihelm.35-224-162-28.nip.io/api/' --data-raw ''
+  Response: {"message":"Hoola "}
 
+/api/dogs(GET) -> Devuelve todos los perritos registrados en forma de arreglo.<br>
+  Ejecutar:
+    curl --location --request GET 'http://apihelm.35-224-162-28.nip.io/api/dogs'
 
+/api/dogs(POST) -> Registra un nuevo perrito.<br>
+  Ejecutar: 
+    curl --location --request POST 'http://apihelm.35-224-162-28.nip.io/api/dogs' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+      "name": "Rocky",
+      "age": "20"
+    }'
 
+/api/dogs/:dog_id(PUT) -> Actualiza los datos de un perrito.<br>
+  Ejecutar: 
+    curl --location --request PUT 'http://apihelm.35-224-162-28.nip.io/api/dogs/62510490222e9b3ffa8219c5' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+      "name": "Rocky",
+      "age": "10"
+    }'
 
-
+/api/dogs/:dog_id(DELETE) -> Elimina los datos de un perrito.<br>
+  Ejecutar:
+    curl --location --request DELETE 'http://apihelm.35-224-162-28.nip.io/api/dogs/62510490222e9b3ffa8219c5'

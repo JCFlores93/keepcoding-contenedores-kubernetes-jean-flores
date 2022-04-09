@@ -7,6 +7,10 @@ docker build -t ultimatenode:dev --target dev --platform linux/x86_64 .
 docker build -t ultimatenode:test --target test --platform linux/x86_64 .
 docker build -t ultimatenode:prod --target prod --platform linux/x86_64 .
 
+docker image tag 7bedd9a4ddfa jeanflores2c93/pets_app:latest
+
+docker push jeanflores2c93/pets_app 
+
 # to run container in ARM
 docker run --platform linux/x86_64 -p 8080:8080 --rm ultimatenode:dev
 docker run --platform linux/x86_64 -p 8080:8080 --rm ultimatenode:test

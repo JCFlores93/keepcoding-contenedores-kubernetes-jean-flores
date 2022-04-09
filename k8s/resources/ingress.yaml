@@ -7,7 +7,7 @@ metadata:
     #nginx.ingress.kubernetes.io/rewrite-target: /  # no hace falta en este ejemplo.
 spec:
   rules:
-  - host: api.35-188-172-244.nip.io
+  - host: api.35-224-162-28.nip.io
     http:
       paths:
       - pathType: Prefix
@@ -17,22 +17,3 @@ spec:
             name: mi-servicio
             port:
               number: 80
-  # - host: apple.34-105-62-166.nip.io
-  #   http:
-  #     paths:
-  #     - pathType: Prefix
-  #       path: "/"
-  #       backend:
-  #         service:
-  #           name: apple-service
-  #           port:
-  #             number: 5678
-  # - http:
-  #     paths:
-  #     - pathType: Prefix
-  #       path: "/"
-  #       backend:
-  #         service:
-  #           name: banana-service
-  #           port:
-  #             number: 5678
